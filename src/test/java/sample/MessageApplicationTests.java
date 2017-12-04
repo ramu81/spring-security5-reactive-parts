@@ -24,6 +24,7 @@ public class MessageApplicationTests {
 	}
 
 	@Test
+	@WithMockCustomUser
 	public void usersWhenUserThenForbidden() {
 		this.client.get()
 				.uri("/users")
@@ -32,6 +33,7 @@ public class MessageApplicationTests {
 	}
 
 	@Test
+	@WithMockCustomUser("rob@example.com")
 	public void usersWhenRobThenOk() {
 		this.client.get()
 				.uri("/users")
