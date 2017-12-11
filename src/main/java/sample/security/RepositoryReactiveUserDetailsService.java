@@ -30,6 +30,11 @@ public class RepositoryReactiveUserDetailsService implements ReactiveUserDetails
 	}
 
 	static class CustomUserDetails extends User implements UserDetails {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -4659808990518701354L;
+
 		public CustomUserDetails(User user) {
 			super(user);
 		}
