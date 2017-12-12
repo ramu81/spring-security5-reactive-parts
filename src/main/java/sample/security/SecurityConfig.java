@@ -23,7 +23,7 @@ import reactor.core.publisher.Mono;
 @Configuration
 @EnableReactiveMethodSecurity
 public class SecurityConfig {
-	private static final Logger logger = LoggerFactory.getLogger(SecurityControllerAdvice.class);
+	private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 	@Bean
 	SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
 		logger.info("springSecurityFilterChain " );

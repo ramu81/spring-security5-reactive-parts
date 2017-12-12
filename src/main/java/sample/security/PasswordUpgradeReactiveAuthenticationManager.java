@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 import sample.user.User;
@@ -22,7 +23,7 @@ import sample.user.UserRepository;
 @Component
 public class PasswordUpgradeReactiveAuthenticationManager implements ReactiveAuthenticationManager {
 	
-	private static final Logger logger = LoggerFactory.getLogger(RepositoryReactiveUserDetailsService.class);
+	private static final Logger logger = LoggerFactory.getLogger(PasswordUpgradeReactiveAuthenticationManager.class);
 	private final UserRepository users;
 	private final ReactiveAuthenticationManager delegate;
 	private final PasswordEncoder encoder;
