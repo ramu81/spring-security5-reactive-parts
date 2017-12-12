@@ -38,9 +38,9 @@ class MongoInitiailizer implements SmartInitializingSingleton {
 		this.users.save(joe).block();
 		this.users.save(vedran).block();
 
-		this.messages.save(new Message(1L, rob, joe, "Hello World")).block();
-		this.messages.save(new Message(2L, rob, joe, "Greetings SpringOne")).block();
-		this.messages.save(new Message(3L, joe, vedran, "Hi San Francisco")).block();
+		this.messages.save(new Message(service.getNextSequence("messageSequence"), rob, joe, "Hello World")).block();
+		this.messages.save(new Message(service.getNextSequence("messageSequence"), rob, joe, "Greetings SpringOne")).block();
+		this.messages.save(new Message(service.getNextSequence("messageSequence"), joe, vedran, "Hi San Francisco")).block();
 
 		// @formatter:off
 		this.users.findAll().doOnNext(user -> user.setPassword("{sha256}" + user.getPassword()))
