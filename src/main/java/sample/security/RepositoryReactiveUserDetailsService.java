@@ -1,15 +1,19 @@
 package sample.security;
 
+import java.util.Collection;
+import java.util.stream.Stream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+
 import reactor.core.publisher.Mono;
 import sample.user.User;
 import sample.user.UserRepository;
-
-import java.util.Collection;
 
 /**
  * @author Rob Winch
@@ -18,6 +22,7 @@ import java.util.Collection;
 @Component
 public class RepositoryReactiveUserDetailsService implements ReactiveUserDetailsService {
 	private final UserRepository users;
+	private static final Logger logger = LoggerFactory.getLogger(RepositoryReactiveUserDetailsService.class);
 
 	public RepositoryReactiveUserDetailsService(UserRepository users) {
 		this.users = users;
@@ -40,7 +45,14 @@ public class RepositoryReactiveUserDetailsService implements ReactiveUserDetails
 
 		@Override
 		public Collection<? extends GrantedAuthority> getAuthorities() {
-			return AuthorityUtils.createAuthorityList("ROLE_USER");
+			Stream.of(Thread.currentThread().getStackTrace()).forEach(i -> {
+				logger.info(i.toString());
+			});
+			if ("rob@example.com".equals(getEmail())) {
+				return AuthorityUtils.createAuthorityList("ROLE_USER", "ROLE_ADMIN");
+			} else {
+				return AuthorityUtils.createAuthorityList("ROLE_USER");
+			}
 		}
 
 		@Override
@@ -55,7 +67,12 @@ public class RepositoryReactiveUserDetailsService implements ReactiveUserDetails
 
 		@Override
 		public boolean isAccountNonLocked() {
-			return true;
+			logger.info("isAccountNonLocked  ==> "+getEmail());
+			if ("rob@example.com".equals(getEmail())) {
+				return true;
+			} else {
+				return false;
+			}
 		}
 
 		@Override

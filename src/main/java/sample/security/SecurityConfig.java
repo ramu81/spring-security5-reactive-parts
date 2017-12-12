@@ -1,5 +1,9 @@
 package sample.security;
 
+import java.util.stream.Stream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authorization.AuthorizationDecision;
@@ -19,11 +23,16 @@ import reactor.core.publisher.Mono;
 @Configuration
 @EnableReactiveMethodSecurity
 public class SecurityConfig {
+	private static final Logger logger = LoggerFactory.getLogger(SecurityControllerAdvice.class);
 	@Bean
 	SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+		logger.info("springSecurityFilterChain " );
+		Stream.of(Thread.currentThread().getStackTrace()).forEach(i -> {
+			logger.info(i.toString());
+		});
 		http
 			.authorizeExchange()
-				.pathMatchers("/users").access(this::isRob)
+				.pathMatchers("/users").access(this::hasAdminRole)
 				.pathMatchers("/login", "/signup", "/webjars/**").permitAll()
 				.anyExchange().authenticated()
 				.and()
@@ -33,8 +42,12 @@ public class SecurityConfig {
 		return http.build();
 	}
 
-	private Mono<AuthorizationDecision> isRob(Mono<Authentication> authentication,
+	private Mono<AuthorizationDecision> hasAdminRole(Mono<Authentication> authentication,
 			AuthorizationContext authorizationContext) {
+		logger.info("hasAdminRole " );
+		Stream.of(Thread.currentThread().getStackTrace()).forEach(i -> {
+			logger.info(i.toString());
+		});
 		return authentication
 				.map(Authentication::getName)
 				.map(username -> username.startsWith("rob@"))
