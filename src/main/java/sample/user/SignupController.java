@@ -1,7 +1,11 @@
 package sample.user;
 
+import java.util.stream.Stream;
+
 import javax.validation.Valid;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -28,19 +32,28 @@ public class SignupController {
 	private final UserRepository users;
 
 	private final PasswordEncoder encoder;
-
+	private static final Logger logger = LoggerFactory.getLogger(SignupController.class);
 	public SignupController(UserRepository users, PasswordEncoder encoder) {
+		Stream.of(Thread.currentThread().getStackTrace()).forEach(i -> {
+			logger.info("SignupController  "+i.toString());
+		});
 		this.users = users;
 		this.encoder = encoder;
 	}
 
 	@GetMapping
 	public Mono<String> signupForm(@ModelAttribute User user) {
+		Stream.of(Thread.currentThread().getStackTrace()).forEach(i -> {
+			logger.info("signupForm  "+i.toString());
+		});
 		return Mono.just("signup/form");
 	}
 
 	@PostMapping
 	public Mono<String> signup(@Valid User user, BindingResult result) {
+		Stream.of(Thread.currentThread().getStackTrace()).forEach(i -> {
+			logger.info("signup  "+i.toString());
+		});
 		if(result.hasErrors()) {
 			return signupForm(user);
 		}

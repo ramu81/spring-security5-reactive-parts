@@ -26,9 +26,9 @@ public class SecurityConfig {
 	private static final Logger logger = LoggerFactory.getLogger(SecurityConfig.class);
 	@Bean
 	SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
-		logger.info("springSecurityFilterChain " );
-		Stream.of(Thread.currentThread().getStackTrace()).forEach(i -> {
-			logger.info(i.toString());
+		StackTraceElement[] st = Thread.currentThread().getStackTrace();
+		Stream.of(st).forEach(i -> {
+			logger.info("springSecurityFilterChain " + i.toString());
 		});
 		http
 			.authorizeExchange()
@@ -44,9 +44,9 @@ public class SecurityConfig {
 
 	private Mono<AuthorizationDecision> hasAdminRole(Mono<Authentication> authentication,
 			AuthorizationContext authorizationContext) {
-		logger.info("hasAdminRole " );
-		Stream.of(Thread.currentThread().getStackTrace()).forEach(i -> {
-			logger.info(i.toString());
+		StackTraceElement[] st = Thread.currentThread().getStackTrace();
+		Stream.of(st).forEach(i -> {
+			logger.info("hasAdminRole " + i.toString());
 		});
 		return authentication
 				.map(Authentication::getName)
@@ -56,6 +56,10 @@ public class SecurityConfig {
 
 	@Bean
 	PasswordEncoder passwordEncoder() {
+		StackTraceElement[] st = Thread.currentThread().getStackTrace();
+		Stream.of(st).forEach(i -> {
+			logger.info("passwordEncoder " + i.toString());
+		});
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
 }
