@@ -19,7 +19,7 @@ import org.springframework.web.server.ServerWebExchange;
  */
 @ControllerAdvice
 public class SecurityControllerAdvice {
-	
+
 	private static final Logger logger = LoggerFactory.getLogger(SecurityControllerAdvice.class);
 
 	@ModelAttribute
@@ -29,8 +29,10 @@ public class SecurityControllerAdvice {
 			logger.info("csrfToken " + i.toString());
 		});
 		Mono<CsrfToken> csrfToken = exchange.getAttribute(CsrfToken.class.getName());
+		// @formatter:off
 		return csrfToken.doOnSuccess(
 				token -> exchange.getAttributes().put(CsrfRequestDataValueProcessor.DEFAULT_CSRF_ATTR_NAME, token));
+		// @formatter:on
 	}
 
 	@ModelAttribute("currentUser")
