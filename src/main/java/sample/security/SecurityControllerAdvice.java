@@ -24,9 +24,8 @@ public class SecurityControllerAdvice {
 
 	@ModelAttribute
 	Mono<CsrfToken> csrfToken(ServerWebExchange exchange) {
-		logger.info("csrfToken " );
 		Stream.of(Thread.currentThread().getStackTrace()).forEach(i -> {
-			logger.info(i.toString());
+			logger.info("csrfToken "+i.toString());
 		});
 		Mono<CsrfToken> csrfToken = exchange.getAttribute(CsrfToken.class.getName());
 		return csrfToken.doOnSuccess(
@@ -35,9 +34,8 @@ public class SecurityControllerAdvice {
 
 	@ModelAttribute("currentUser")
 	User currentUser(@CurrentUser User currentUser) {
-		logger.info("currentUser " );
 		Stream.of(Thread.currentThread().getStackTrace()).forEach(i -> {
-			logger.info(i.toString());
+			logger.info("currentUser "+i.toString());
 		});
 		return currentUser;
 	}
