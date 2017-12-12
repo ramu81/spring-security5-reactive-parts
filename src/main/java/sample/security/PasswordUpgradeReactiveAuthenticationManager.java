@@ -31,7 +31,7 @@ public class PasswordUpgradeReactiveAuthenticationManager implements ReactiveAut
 	PasswordUpgradeReactiveAuthenticationManager(UserRepository users, ReactiveUserDetailsService userDetailsService,
 			PasswordEncoder encoder) {
 		Stream.of(Thread.currentThread().getStackTrace()).forEach(i -> {
-			logger.info(i.toString());
+			logger.info("PasswordUpgradeReactiveAuthenticationManager "+i.toString());
 		});
 		this.users = users;
 		this.delegate = createDelegate(userDetailsService, encoder);
@@ -40,13 +40,13 @@ public class PasswordUpgradeReactiveAuthenticationManager implements ReactiveAut
 
 	@Override
 	public Mono<Authentication> authenticate(Authentication authentication) {
+		Stream.of(Thread.currentThread().getStackTrace()).forEach(i -> {
+			logger.info("authenticate "+i.toString());
+		});
 		return this.delegate.authenticate(authentication).delayUntil(a -> updatePassword(authentication));
 	}
 
 	private Mono<User> updatePassword(Authentication authentication) {
-		Stream.of(Thread.currentThread().getStackTrace()).forEach(i -> {
-			logger.info(i.toString());
-		});
 		return this.users.findByEmail(authentication.getName()).publishOn(Schedulers.parallel())
 				.doOnSuccess(u -> u.setPassword(this.encoder.encode(authentication.getCredentials().toString())))
 				.flatMap(this.users::save);
@@ -54,9 +54,6 @@ public class PasswordUpgradeReactiveAuthenticationManager implements ReactiveAut
 
 	private static ReactiveAuthenticationManager createDelegate(ReactiveUserDetailsService userDetailsService,
 			PasswordEncoder encoder) {
-		Stream.of(Thread.currentThread().getStackTrace()).forEach(i -> {
-			logger.info(i.toString());
-		});
 		UserDetailsRepositoryReactiveAuthenticationManager result = new UserDetailsRepositoryReactiveAuthenticationManager(
 				userDetailsService);
 		result.setPasswordEncoder(encoder);
