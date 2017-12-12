@@ -30,17 +30,19 @@ class MongoInitiailizer implements SmartInitializingSingleton {
 		// sha256 w/ salt encoded "password"
 		String passsword = "73ac8218b92f7494366bf3a03c0c2ee2095d0c03a29cb34c95da327c7aa17173248af74d46ba2d4c";
 		User rob = new User(service.getNextSequence("customSequences"), "rob@example.com", passsword, "Rob", "Winch");
-		User joe = new User(service.getNextSequence("customSequences"), "joe@example.com",
-				passsword, "Joe", "Grandja");
-		User vedran = new User(service.getNextSequence("customSequences"), "vedran@example.com", passsword, "Vedran", "Pavić");
+		User joe = new User(service.getNextSequence("customSequences"), "joe@example.com", passsword, "Joe", "Grandja");
+		User vedran = new User(service.getNextSequence("customSequences"), "vedran@example.com", passsword, "Vedran",
+				"Pavić");
 
 		this.users.save(rob).block();
 		this.users.save(joe).block();
 		this.users.save(vedran).block();
 
 		this.messages.save(new Message(service.getNextSequence("messageSequence"), rob, joe, "Hello World")).block();
-		this.messages.save(new Message(service.getNextSequence("messageSequence"), rob, joe, "Greetings SpringOne")).block();
-		this.messages.save(new Message(service.getNextSequence("messageSequence"), joe, vedran, "Hi San Francisco")).block();
+		this.messages.save(new Message(service.getNextSequence("messageSequence"), rob, joe, "Greetings SpringOne"))
+				.block();
+		this.messages.save(new Message(service.getNextSequence("messageSequence"), joe, vedran, "Hi San Francisco"))
+				.block();
 
 		// @formatter:off
 		this.users.findAll().doOnNext(user -> user.setPassword("{sha256}" + user.getPassword()))
