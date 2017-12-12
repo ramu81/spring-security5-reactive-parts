@@ -3,8 +3,8 @@ package sample.sequence;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "customSequences")
-public class CustomSequences {
+@Document(collection = "userSequence")
+public class UserSequence {
 	@Id
 	private String seqName;
 	private long seqId;

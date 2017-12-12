@@ -15,8 +15,8 @@ public class NextSequenceService {
 	private MongoOperations mongo;
 
 	public long getNextSequence(String seqName) {
-		CustomSequences counter = mongo.findAndModify(query(where("_seqName").is(seqName)), new Update().inc("seqId", 1),
-				options().returnNew(true).upsert(true), CustomSequences.class);
+		UserSequence counter = mongo.findAndModify(query(where("_seqName").is(seqName)), new Update().inc("seqId", 1),
+				options().returnNew(true).upsert(true), UserSequence.class);
 		return counter.getSeqId();
 	}
 }
